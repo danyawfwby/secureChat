@@ -22,7 +22,7 @@ class Sockets(Namespace):
     def on_connect(this):
         global connectsList
         connectsList[request.sid] = this
-        print(request.sid)
+        return request.sid
 
     def on_disconnect(this):
         global connectsList
