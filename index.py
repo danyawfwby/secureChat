@@ -1,41 +1,16 @@
 from array import array
 from flask import Flask, render_template, send_file, redirect, request, make_response, jsonify
 import json
-from flask_socketio import SocketIO
-from flask_socketio import Namespace, emit
-
-
-users = []
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-socketio = SocketIO(app)
 
 @app.route('/')
 @app.route('/index')
 def index():
     return render_template("index.html")
 
-connectsList = {}
-
-class Sockets(Namespace):
-    def on_connect(this):
-        global connectsList
-        connectsList[request.sid] = this
-        return request.sid
-
-    def on_disconnect(this):
-        global connectsList
-        del connectsList[request.sid]
-
-    def on_message(this, data):
-        global connectsList
-        connectsList[data["recipient"]].sendMessage(data["message"]["text"])
-
-    def sendMessage(this, mess):
-        emit('recieveMessage', mess, broadcast=False)
-
-socketio.on_namespace(Sockets('/'))
+connections = {}
 
 # @socketio.on('message')
 # def handle_message(data):
@@ -109,4 +84,4 @@ socketio.on_namespace(Sockets('/'))
 
     
 if __name__ == "__main__":
-    socketio.run(app)
+    app.run(debug=True)
