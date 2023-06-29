@@ -62,6 +62,7 @@ body{
     transition: .2s;
     padding: 20px 15px;
     display: flex;
+    flex-direction: column;
 }
 .chat-left-favourite-list{
     border-bottom: 1px solid #eee;
