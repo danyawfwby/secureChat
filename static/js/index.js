@@ -78,8 +78,10 @@ window.addEventListener("DOMContentLoaded", function(){
 
     newFavourite = function(){
         const ip = prompt("Введите ip вашего собеседника")
-        const a = aFavourite(ip)
-        favouriteList.appendChild(a)
+        if(ip){
+            const a = aFavourite(ip)
+            favouriteList.appendChild(a)
+        }
     }
     
 })
