@@ -66,7 +66,7 @@ window.addEventListener("DOMContentLoaded", function(){
         ip = e.querySelector(".ip").innerText
         note = e.querySelector(".note").innerText
         dialogeName.innerText = note
-        interval = setInterval(intervalFunc, 5000)    
+        interval = setInterval(intervalFunc, 1000)    
     }
 
     function aFavourite(ip, note = "Неизвестный"){
