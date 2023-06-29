@@ -130,6 +130,7 @@ body{
     height: 48px;
     justify-content: center;
     padding: 13px;
+    flex-direction: row;
 }
 .chat-left-favourite .new img{
     vertical-align: middle;
