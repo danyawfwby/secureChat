@@ -10,6 +10,20 @@ window.addEventListener("DOMContentLoaded", function(){
     const dialogeName = document.querySelector(".chat-info .dialoge")
     const chatBox = document.querySelector(".chat-box")
     const favouriteList = document.querySelector(".chat-left-favourite-list")
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    users.forEach(function(e){
+        const a = aFavourite(e)
+        favouriteList.appendChild(a)
+    })
+
+    function getUsersJSON(){
+        return JSON.parse(localStorage.getItem("users") || "[]")
+    }
+
+    function setUsersJSON(arg){
+        localStorage.setItem("users", JSON.stringify(arg))
+    }
 
     function getHisMessDiv(name, text){
         const div = document.createElement("div")
@@ -79,6 +93,10 @@ window.addEventListener("DOMContentLoaded", function(){
     newFavourite = function(){
         const ip = prompt("Введите ip вашего собеседника")
         if(ip){
+            let users = getUsersJSON()
+            console.log(users)
+            users.push(ip)
+            setUsersJSON(users)
             const a = aFavourite(ip)
             favouriteList.appendChild(a)
         }
