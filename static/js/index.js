@@ -1,5 +1,6 @@
 let openDialoge = null;
 let newFavourite = null;
+let sendMessage = null;
 window.addEventListener("DOMContentLoaded", function(){
 
     let interval = null;
@@ -31,13 +32,17 @@ window.addEventListener("DOMContentLoaded", function(){
             chatBox.appendChild(mess)
         })
     }
-
-    sendForm.addEventListener("submit", async function(e){
-        e.preventDefault()
-        const formData = new FormData(e.target)
+    sendMessage = async function(e){
+        console.log(e)
+        e.preventDefault && e.preventDefault()
+        const formData = new FormData(sendForm)
         const mess = formData.get("text")
         await xhrPromise("/send_message", {'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'}, "POST", `recipient=${ip}&text=${mess}`)
-        e.target.querySelector("input").value = ""
+        sendForm.querySelector("input").value = ""
+        return false;
+    }
+    sendForm.addEventListener("submit", function(e){
+        sendMessage(e)
     })
 
     function xhrPromise(url, headers, method = "GET", data = ""){
