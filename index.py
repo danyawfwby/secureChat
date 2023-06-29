@@ -1,87 +1,107 @@
-from array import array
+import array
 from flask import Flask, render_template, send_file, redirect, request, make_response, jsonify
 import json
+import time
+import struct
+import hashlib
+import random
+import asyncio
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret!'
+
+class Users:
+    def __init__(this) -> None:
+        this.__users = {}
+
+    def initUser(this, ip):
+        this.__users[ip] = {"messages": [], "lastActive": time.time()}
+
+    def getUser(this, ip):
+        if ip in this.__users:
+            return this.__users[ip]
+    
+    def getUsers(this):
+        return this.__users
+    
+    def addMessage(this, ip, text):
+        if ip in this.__users:
+            if "messages" in this.__users[ip]:
+                this.__users[ip]["messages"].append(text) 
+    
+    def getMessages(this, ip):
+            if ip in this.__users:
+                if "messages" in this.__users[ip]:
+                    return this.__users[ip]["messages"]
+            return []
+
+    def setOnline(this, ip):
+        this.__users[ip]["lastActive"] = time.time()
+
+users = Users()
+
+def returnSleep(delay):
+    time.sleep(delay)
+    return True
+
+def deleteEl(arr, key):
+    if key in arr:
+        del arr[key]
 
 @app.route('/')
 @app.route('/index')
 def index():
+    ip = request.remote_addr
+    users.initUser(ip)
     return render_template("index.html")
-
-connections = {}
-
-# @socketio.on('message')
-# def handle_message(data):
-#     print(request.remote_addr)
-#     print('received message: ' + data)
-    # resp = make_response();
-
-    # TOKEN = request.cookies.get("access_token")
-    # hidden_users = request.cookies.get("hidden_users")
-    # try:
-    #     hidden_users = json.loads(hidden_users)
-    # except:
-    #     hidden_users = []
-
-    # if(TOKEN):
-    #     suggestions = VKAPI.friends.getSuggestions(TOKEN).response;
-    #     if("response" in suggestions):
-    #         suggestions = suggestions["response"]["items"];
-    #         resp.data = render_template("pages/index.html", suggestions=suggestions, hidden_users=hidden_users);
-    #     elif("error" in suggestions):
-    #         resp.data = suggestions["error"]["error_msg"]
-    # else:
-    #     resp = redirect("/auth", 302)
     
-    # return resp;
+@app.route("/send_message", methods=["POST"])
+def sendMessage():
+    response = {"status": "failed"}
+    ip = request.form.get("recipient")
+    text = request.form.get("text")
 
-
-# @app.route("/json/getSuggestions", methods=["GET"])
-# def get_familiars():
-#     resp = make_response();
-#     resp.mimetype='application/json; charset=utf-8';
-
-#     TOKEN = request.cookies.get("access_token")
-#     OFFSET = request.form.get("offset")
-#     result = json.dumps({"error": "Unexpected error"})
-#     suggestions = VKAPI.friends.getSuggestions(TOKEN, OFFSET).response;
-#     if("response" in suggestions):
-#         result = json.dumps(suggestions)
+    if ip in users.getUsers():
+        users.getMessages(ip).append(text)
+        response["status"] = "success"
+    else:
+        response["reason"] = "Данный человек сейчас не в онлайне."
     
-#     resp.data = result
-    
-#     return resp
+    return response
 
+@app.route("/get_messages", methods=["POST"])
+def getMessages():
+    ip = request.remote_addr
+    toReturn = users.getMessages(ip).copy()
+    users.initUser(ip)
+    return toReturn
 
-# @app.route("/oneclick/add_friends", methods=["POST"])
-# def add():
-#     resp = make_response()
-#     resp.mimetype='application/json; charset=utf-8';
-    
-#     TOKEN = request.cookies.get("access_token")
-#     user_ids = request.form.get("user_ids")
+@app.route("/online", methods=["GET"])
+def online():
+    return str(len(users.getUsers()))
 
-#     added = []
-#     result = json.dumps({"error": "Unexpected error"})
-#     if(user_ids):
-#         try:
-#             user_ids = json.loads(user_ids)
-#             for user_id in user_ids:
-#                 status = VKAPI.friends.add(TOKEN, user_id).response;
-#                 print(status)
-#                 if("response" in status):
-#                     added.append(user_id)
-#                 elif("error" in status):
-#                     result = json.dumps({"error": status["error"]["error_text"]});
-#                     break;
-#         except:
-#             pass
-#     resp.data = json.dumps(added) if len(added) else result
+def onlineChecker(delay):
+    while returnSleep(delay):
+        usersClone = list(users.getUsers())
+        for k, v in list(usersClone.items()):
+            lastActive = v.get("lastActive")
+            if(time.time()-30 > lastActive):
+                print(f"Отключен пользователь {k} за долгое бездействие")
+                deleteEl(users.getUsers(), k)
 
-#     return resp;
+async def main():
+    taskApp = asyncio.create_task(app.run(debug=True))
+    taskChecker = asyncio.create_task(onlineChecker(3))
+    await taskApp
+    await taskChecker
 
     
 if __name__ == "__main__":
-    app.run(debug=True)
+    asyncio.run(main())
+
+
+# def getId(ip):
+#     randomId = random.randint(1000000, 9999999)
+#     randomIdTime = int(time.time()*randomId)
+#     stringId = f"{ip}{randomIdTime}"
+#     encoded = str.encode(stringId)
+#     return hashlib.sha256(encoded).hexdigest()

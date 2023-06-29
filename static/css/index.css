@@ -1,0 +1,146 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+body{
+    background-color: #FBFBFB;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+header{
+    margin-bottom: 20px;
+}
+body{
+    padding: 20px;
+}
+.container{
+    max-width: 1180px;
+    width: 100%;
+    margin: auto;
+}
+.logo{
+    align-items: center;
+    display: flex;
+}
+.logo h1{
+    font-size: 24px;
+    font-weight: 700;
+    margin-right: 15px;
+}
+.logo img{
+    width: 35px;
+    height: 35px;
+}
+.chat-container{
+    border: 1px solid #eee;
+    overflow: hidden;
+    display: flex;
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    height: 80vh;
+}
+.chat-left{
+    height: 100%;
+    border-radius: 15px 0 0 15px;
+    border-right: 1px solid #eee;
+    max-width: 250px;
+    width: 100%;
+}
+.chat-left-header{
+    border-radius: 15px 0 0 0;
+    padding: 20px 16px;
+    display: flex;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #eee;
+    height: 10%;
+}
+.chat-left-favourite{
+    transition: .2s;
+    padding: 20px 15px;
+    display: flex;
+}
+.chat-left-favourite-list{
+    overflow-y: scroll;
+    max-height: 80%;
+}
+.chat-left-favourite:hover{
+    color: white;
+    background-color: black;
+}
+.chat-left-favourite:not(:last-child){
+    border-bottom: 1px solid #eee;
+}   
+.note::before {
+    content: "(";
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.note::after {
+    content: ")";
+    margin-left: 5px;
+}
+.chat-right{
+    width: 100%;
+}
+.chat-info{
+    height: 10%;
+    padding: 22px 17px;
+    border-bottom: 1px solid #eee;
+}
+.chat-box{
+    overflow-y: scroll;
+    padding: 30px;
+    background-color: #EAEAFF;
+    height: 82%;
+    border-bottom: 1px solid #eee;
+}
+.chat-input{
+    display: flex;
+    width: 100%;
+    height: 8%;
+}
+.chat-input form{
+    width: 100%;
+}
+.chat-input input {
+    width: 90%;
+    height: 93%;
+    border: none;
+    outline: none;
+    padding: 0 12px;
+}
+.input-buttons{
+    display: flex;
+    min-width: 74px;
+    width: 10%;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.input-buttons img{
+    width: 22px;
+}
+.chat-left-favourite.new{
+    justify-content: center;
+}
+.chat-left-favourite .new img{
+    vertical-align: middle;
+}
+.message{
+    padding: 12px 16px;
+    background-color: #fff;
+    margin-top: 15px;
+    width: 50%;
+    max-width: 300px;
+    border-radius: 15px;
+}
+.mine-message{
+    margin-left: auto;
+}
+.message .name{
+    font-weight: 600;
+    margin-bottom: 10px;
+}

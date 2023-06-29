@@ -3,17 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+    <title>Чат</title>
+    <script src="static/js/index.js"></script>
+    <link rel="stylesheet" href="static/css/index.css">
+    <link rel="shortcut icon" href="static/img/logo.svg" type="image/x-icon">
+    <meta name="description" content="Посреднеческий чат выполняющий функцию передачи сообщений от одного клиента другому."> 
 </head>
 <body>
-    <form action="/#" method="post">
-        <label for="name">Введите свое имя</label>
-        <input type="text" id="name">
-        <input type="submit">
-    </form>
-    <div id="app">
-        
-    </div>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <h1>SecureChat</h1>
+                <img src="static/img/logo.svg" alt="">
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="chat-container container">
+            <div class="chat-left">
+                <div class="chat-left-header">
+                    <h3>Чаты</h3>
+                </div>
+                <div class="chat-left-favourite-list">
+                    <a class="chat-left-favourite" href="#" onclick="openDialoge(this)">
+                        <div class="ip">
+                            127.0.0.1
+                        </div>
+                        <div class="note">Чат с собой</div>
+                    </a>
+                </div>
+                <a class="chat-left-favourite new" href="#" onclick="newFavourite()">
+                    <div class="new"><img src="static/img/plus.svg" alt=""></div>
+                </a>
+            </div>
+            <div class="chat-right">
+                <div class="chat-info">
+                    <div class="dialoge">
+                    </div>
+                </div>
+                <div class="chat-box">
+                </div>
+                <div class="chat-input">
+                    <form action="/send_message" class="send_form" method="post">
+                        <input type="text" name="text">
+                    </form>
+                    <div class="input-buttons">
+                        <a href="" class="smiles"><img src="static/img/smiles.svg" alt=""></a>
+                        <a href="" class="send"><img src="static/img/send.svg" alt=""></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 </body>
 </html>
