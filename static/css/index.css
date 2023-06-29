@@ -66,7 +66,7 @@ body{
 .chat-left-favourite-list{
     border-bottom: 1px solid #eee;
     overflow-y: scroll;
-    height: calc(100% - 124px);
+    height: calc(100% - 108px);
 }
 .chat-left-favourite:hover{
     color: white;
@@ -126,8 +126,9 @@ body{
     width: 22px;
 }
 .chat-left-favourite.new{
-    height: 64px;
+    height: 48px;
     justify-content: center;
+    padding: 13px;
 }
 .chat-left-favourite .new img{
     vertical-align: middle;
