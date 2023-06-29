@@ -33,7 +33,6 @@ window.addEventListener("DOMContentLoaded", function(){
         })
     }
     sendMessage = async function(e){
-        console.log(e)
         e.preventDefault && e.preventDefault()
         const formData = new FormData(sendForm)
         const mess = formData.get("text")
@@ -71,9 +70,10 @@ window.addEventListener("DOMContentLoaded", function(){
     }
 
     function aFavourite(ip, note = "Неизвестный"){
-        const a = document.createElement("a")
-        a.innerHTML = `<a class="chat-left-favourite" href="#" onclick="openDialoge(this)"><div class="ip">${ip}</div><div class="note">${note}</div></a>`
-        return a
+        const str = `<a class="chat-left-favourite" href="#" onclick="openDialoge(this)"><div class="ip">${ip}</div><div class="note">${note}</div></a>`
+        const parser = new DOMParser();
+        const htmlDoc = parser.parseFromString(str, 'text/html');
+        return htmlDoc.querySelector("a")
     }
 
     newFavourite = function(){

@@ -52,7 +52,7 @@ def deleteEl(arr, key):
 def index():
     ip = request.remote_addr
     users.initUser(ip)
-    return render_template("index.html")
+    return render_template("index.html", myip=ip)
     
 @app.route("/send_message", methods=["POST"])
 def sendMessage():
