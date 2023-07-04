@@ -14,6 +14,11 @@ a{
 header{
     margin-bottom: 20px;
 }
+header .container{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 body{
     padding: 20px;
 }
@@ -149,4 +154,35 @@ body{
 .message .name{
     font-weight: 600;
     margin-bottom: 10px;
+}
+.mobile{
+    display: none;
+}
+@media(max-width: 768px){
+    .mobile{
+        display: block;
+    }
+    .chat-container{
+        flex-direction: column;
+    }
+    .chat-right{
+        height: 100%;
+    }
+    .chat-left{
+        height: 100%;
+        max-width: unset;
+    }
+    .chat-left-favourite.new{
+        border-bottom: 1px solid #eee;
+    }
+    .mobile-showed{
+        overflow: unset;
+        width: inherit;
+        height: inherit;
+    }
+    .mobile-hidden{
+        overflow: hidden;
+        width: 0;
+        height: 0;
+    }
 }

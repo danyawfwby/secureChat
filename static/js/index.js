@@ -3,17 +3,27 @@ let newFavourite = null;
 let sendMessage = null;
 window.addEventListener("DOMContentLoaded", function(){
 
+
     let interval = null;
     let ip = null;
     let note = null;
+    const chatLeft = document.querySelector(".chat-left")
+    const chatRight = document.querySelector(".chat-right")
+    const openChatsA = document.querySelector(".openChats")
     const sendForm = document.querySelector(".send_form")
     const dialogeName = document.querySelector(".chat-info .dialoge")
     const chatBox = document.querySelector(".chat-box")
     const favouriteList = document.querySelector(".chat-left-favourite-list")
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const users = getUsersJSON();
+
+    openChatsA.addEventListener("click", function(e){
+        e.preventDefault()
+        chatLeft.classList.toggle("mobile-hidden")
+        chatRight.classList.toggle("mobile-hidden")
+    })
 
     users.forEach(function(e){
-        const a = aFavourite(e)
+        const a = aFavourite(e.ip, e.note)
         favouriteList.appendChild(a)
     })
 
@@ -23,6 +33,14 @@ window.addEventListener("DOMContentLoaded", function(){
 
     function setUsersJSON(arg){
         localStorage.setItem("users", JSON.stringify(arg))
+    }
+
+    function getMessagesJSON(){
+        return JSON.parse(localStorage.getItem("messages") || "{}")
+    }
+
+    function setMessagesJSON(arg){
+        localStorage.setItem("messages", JSON.stringify(arg))
     }
 
     function getHisMessDiv(name, text){
@@ -42,6 +60,10 @@ window.addEventListener("DOMContentLoaded", function(){
         headers = {'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'}
         let messages = await xhrPromise('/get_messages', headers, "POST")
         messages && messages.forEach(function(e){
+            let messJSON = getMessagesJSON()
+            messJSON[ip] || (messmessJSONages[ip] = [])
+            messJSON[ip].push({"sender": "notme", "text": e})
+            setMessagesJSON(messJSON)
             let mess = getHisMessDiv(note, e)
             chatBox.appendChild(mess)
         })
@@ -50,8 +72,16 @@ window.addEventListener("DOMContentLoaded", function(){
         e.preventDefault && e.preventDefault()
         const formData = new FormData(sendForm)
         const mess = formData.get("text")
-        await xhrPromise("/send_message", {'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'}, "POST", `recipient=${ip}&text=${mess}`)
-        sendForm.querySelector("input").value = ""
+        const response = await xhrPromise("/send_message", {'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'}, "POST", `recipient=${ip}&text=${mess}`)
+        if(response.status == "success"){
+            sendForm.querySelector("input").value = "";
+            const messBlock = getMineMessDiv(mess);
+            chatBox.appendChild(messBlock);
+            let messages = getMessagesJSON()
+            messages[ip] || (messages[ip] = [])
+            messages[ip].push({"sender": "me", "text": mess})
+            setMessagesJSON(messages)
+        }else alert(response.reason);
         return false;
     }
     sendForm.addEventListener("submit", function(e){
@@ -80,6 +110,13 @@ window.addEventListener("DOMContentLoaded", function(){
         ip = e.querySelector(".ip").innerText
         note = e.querySelector(".note").innerText
         dialogeName.innerText = note
+        let messages = getMessagesJSON()
+        if(messages[ip]){
+            Object.entries(messages[ip]).forEach(function(a, b, c){
+                if(a[1].sender == "me") chatBox.appendChild(getMineMessDiv(a[1].text));
+                else chatBox.appendChild(getHisMessDiv(note, a[1].text));
+            })
+        }
         interval = setInterval(intervalFunc, 1000)    
     }
 
@@ -93,13 +130,12 @@ window.addEventListener("DOMContentLoaded", function(){
     newFavourite = function(){
         const ip = prompt("Введите ip вашего собеседника")
         if(ip){
+            const note = prompt("Введите псевдоним вашего собеседника")
             let users = getUsersJSON()
-            console.log(users)
-            users.push(ip)
+            users.push({"ip": ip, "note": note})
             setUsersJSON(users)
-            const a = aFavourite(ip)
+            const a = aFavourite(ip, note)
             favouriteList.appendChild(a)
         }
     }
-    
 })
