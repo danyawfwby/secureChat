@@ -186,6 +186,9 @@ body{
         max-width: unset;
     }
     .chat-left-favourite.new{
+        position: fixed;
+        width: 100%;
+        bottom: 0;
         border-bottom: 1px solid #eee;
     }
     .mobile-showed{
