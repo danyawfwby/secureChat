@@ -201,4 +201,20 @@ body{
     .chat-container{
         height: calc( 100vh - 75px );
     }
+    .openChats{
+        display: flex;
+        align-items: center;
+    }
+    .openChats::after{
+        content: url("/static/img/plus.svg");
+        width: 24px;
+        height: 24px;
+        display: block;
+    }
+    .openChats.opened::after{
+        content: url("/static/img/minus.svg");
+        width: 24px;
+        height: 24px;
+        display: block;
+    }
 }

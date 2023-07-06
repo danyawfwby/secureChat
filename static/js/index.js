@@ -19,6 +19,7 @@ window.addEventListener("DOMContentLoaded", function(){
     function showChat(){
         chatLeft.classList.toggle("mobile-hidden")
         chatRight.classList.toggle("mobile-hidden")
+        openChatsA.classList.toggle("opened")
     }
 
     function getUsersJSON(){
