@@ -1,9 +1,15 @@
 let openDialoge = null;
 let newFavourite = null;
 let sendMessage = null;
+
 window.addEventListener("DOMContentLoaded", function(){
 
+    class Database{
+        constructor(){
 
+        }
+        
+    }
     let interval = null;
     let ip = null;
     let note = null;
@@ -38,6 +44,23 @@ window.addEventListener("DOMContentLoaded", function(){
         localStorage.setItem("messages", JSON.stringify(arg))
     }
 
+    function addMessageStorage(key, value, sender){
+        const messJSON = getMessagesJSON()
+        messJSON[key] || (messmessJSONages[key] = [])
+        messJSON[key].push({"sender": sender, "text": value})
+        setMessagesJSON(messJSON)
+    }
+    function addUserStorage(ip, note){
+        let users = getUsersJSON()
+        users.push({"ip": ip, "note": note})
+        setUsersJSON(users)
+    }
+
+    function addMessageBox(messBlock){
+        chatBox.appendChild(messBlock);
+        chatBox.scrollTop = chatBox.scrollHeight
+    }
+
     function getHisMessDiv(name, text){
         const div = document.createElement("div")
         div.innerHTML = `<div class="sender-message message"><div class="name">${name}</div><div class="text">${text}</div></div>`
@@ -54,28 +77,25 @@ window.addEventListener("DOMContentLoaded", function(){
     async function intervalFunc(){
         headers = {'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'}
         let messages = await xhrPromise('/get_messages', headers, "POST")
-        messages && messages.forEach(function(e){
-            let messJSON = getMessagesJSON()
-            messJSON[ip] || (messmessJSONages[ip] = [])
-            messJSON[ip].push({"sender": "notme", "text": e})
-            setMessagesJSON(messJSON)
-            let mess = getHisMessDiv(note, e)
-            chatBox.appendChild(mess)
-        })
+        if(messages.length){
+            messages.forEach(function(e){
+                addMessageStorage(ip, e, "notme")
+                let mess = getHisMessDiv(note, e)
+                addMessageBox(mess)
+            })
+        }
     }
+
     sendMessage = async function(e){
         e.preventDefault && e.preventDefault()
-        const formData = new FormData(sendForm)
-        const mess = formData.get("text")
+        let mess = new FormData(sendForm).get("text")
         const response = await xhrPromise("/send_message", {'Content-type': 'application/x-www-form-urlencoded; charset=utf-8'}, "POST", `recipient=${ip}&text=${mess}`)
         if(response.status == "success"){
+            mess = response.converted
             sendForm.querySelector("input").value = "";
             const messBlock = getMineMessDiv(mess);
-            chatBox.appendChild(messBlock);
-            let messages = getMessagesJSON()
-            messages[ip] || (messages[ip] = [])
-            messages[ip].push({"sender": "me", "text": mess})
-            setMessagesJSON(messages)
+            addMessageBox(messBlock)
+            addMessageStorage(ip, mess, "me")
         }else alert(response.reason);
         return false;
     }
@@ -84,11 +104,9 @@ window.addEventListener("DOMContentLoaded", function(){
         return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();
             xhr.open(method, url, true)
-            Object.entries(headers).forEach(function(k){
-                let header = k[0];
-                let value = k[1];
-                xhr.setRequestHeader(header, value);
-            })
+            for(const [key, value] of Object.entries(headers)){
+                xhr.setRequestHeader(key, value);
+            }
             xhr.onreadystatechange = function() {
                 if (this.readyState == 4) resolve(JSON.parse(this.response));
             }
@@ -104,13 +122,12 @@ window.addEventListener("DOMContentLoaded", function(){
         note = e.querySelector(".note").innerText
         dialogeName.innerText = note
         let messages = getMessagesJSON()
-        if(messages[ip]){
-            Object.entries(messages[ip]).forEach(function(a, b, c){
-                if(a[1].sender == "me") chatBox.appendChild(getMineMessDiv(a[1].text));
-                else chatBox.appendChild(getHisMessDiv(note, a[1].text));
-            })
-        }
-        interval = setInterval(intervalFunc, 1000)    
+        typeof messages[ip] == "object" && messages[ip].forEach(function(e){
+            if(e.sender == "me") chatBox.appendChild(getMineMessDiv(e.text));
+            else chatBox.appendChild(getHisMessDiv(note, e.text));
+        })
+        chatBox.scrollTop = chatBox.scrollHeight
+        interval = setInterval(intervalFunc, 1000)  
     }
 
     function aFavourite(ip, note = "Неизвестный"){
@@ -124,9 +141,7 @@ window.addEventListener("DOMContentLoaded", function(){
         const ip = prompt("Введите ip вашего собеседника")
         if(ip){
             const note = prompt("Введите псевдоним вашего собеседника")
-            let users = getUsersJSON()
-            users.push({"ip": ip, "note": note})
-            setUsersJSON(users)
+            addUserStorage(ip, note)
             const a = aFavourite(ip, note)
             favouriteList.appendChild(a)
         }

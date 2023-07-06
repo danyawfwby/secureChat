@@ -2,6 +2,7 @@ import array
 from flask import Flask, render_template, send_file, redirect, request, make_response, jsonify
 import json
 import time
+import html
 import struct
 import hashlib
 import random
@@ -61,8 +62,13 @@ def sendMessage():
     text = request.form.get("text")
 
     if ip in users.getUsers():
-        users.getMessages(ip).append(text)
-        response["status"] = "success"
+        if text.strip():
+            text = html.escape(text)
+            users.getMessages(ip).append(text)
+            response["status"] = "success"
+            response["converted"] = text
+        else:
+            response["reason"] = "Сообщение не может быть пустым."
     else:
         response["reason"] = "Данный человек сейчас не в онлайне."
     

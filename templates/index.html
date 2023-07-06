@@ -12,10 +12,10 @@
 <body>
     <header>
         <div class="container">
-            <div class="logo">
+            <a class="logo" href="/">
                 <h1>SecureChat</h1>
                 <img src="static/img/logo.svg" alt="">
-            </div>
+            </a>
             <a href="#" class="mobile openChats opened">Чаты</a>
         </div>
     </header>
@@ -45,7 +45,7 @@
                 </div>
                 <div class="chat-input">
                     <form action="/send_message" class="send_form" method="post">
-                        <input type="text" name="text">
+                        <input type="text" name="text" placeholder="Сообщение...">
                     </form>
                     <div class="input-buttons">
                         <a href="" class="smiles"><img src="static/img/smiles.svg" alt=""></a>
