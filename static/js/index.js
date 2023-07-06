@@ -16,16 +16,10 @@ window.addEventListener("DOMContentLoaded", function(){
     const favouriteList = document.querySelector(".chat-left-favourite-list")
     const users = getUsersJSON();
 
-    openChatsA.addEventListener("click", function(e){
-        e.preventDefault()
+    function showChat(){
         chatLeft.classList.toggle("mobile-hidden")
         chatRight.classList.toggle("mobile-hidden")
-    })
-
-    users.forEach(function(e){
-        const a = aFavourite(e.ip, e.note)
-        favouriteList.appendChild(a)
-    })
+    }
 
     function getUsersJSON(){
         return JSON.parse(localStorage.getItem("users") || "[]")
@@ -84,9 +78,6 @@ window.addEventListener("DOMContentLoaded", function(){
         }else alert(response.reason);
         return false;
     }
-    sendForm.addEventListener("submit", function(e){
-        sendMessage(e)
-    })
 
     function xhrPromise(url, headers, method = "GET", data = ""){
         return new Promise((resolve, reject) => {
@@ -106,6 +97,7 @@ window.addEventListener("DOMContentLoaded", function(){
 
     openDialoge = function(e){
         chatBox.innerHTML = ""
+        showChat()
         clearInterval(interval)
         ip = e.querySelector(".ip").innerText
         note = e.querySelector(".note").innerText
@@ -138,4 +130,18 @@ window.addEventListener("DOMContentLoaded", function(){
             favouriteList.appendChild(a)
         }
     }
+
+    openChatsA.addEventListener("click", function(e){
+        e.preventDefault()
+        showChat()
+    })
+
+    users.forEach(function(e){
+        const a = aFavourite(e.ip, e.note)
+        favouriteList.appendChild(a)
+    })
+
+    sendForm.addEventListener("submit", function(e){
+        sendMessage(e)
+    })
 })
