@@ -4,29 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Чат</title>
-    <!-- Yandex.RTB -->
-<script>window.yaContextCb=window.yaContextCb||[]</script>
-<script src="https://yandex.ru/ads/system/context.js" async></script>
+<script async src='https://yandex.ru/ads/system/header-bidding.js'></script>
+<script>
+var adfoxBiddersMap = {
+  "criteo": "3028583"
+};
+
+var adUnits = [
+  {
+    "code": "adfox_171499348684253565",
+    "bids": [
+      {
+        "bidder": "criteo",
+        "params": {
+          "placementId": "234234"
+        }
+      }
+    ]
+  }
+];
+
+var userTimeout = 500;
+
+window.YaHeaderBiddingSettings = {
+   biddersMap: adfoxBiddersMap,
+   adUnits: adUnits,
+   timeout: userTimeout,
+};
+</script>
+<script>window.yaContextCb = window.yaContextCb || []</script>
+<script src='https://yandex.ru/ads/system/context.js' async></script>
+    
     <script src="static/js/index.js"></script>
     <link rel="stylesheet" href="static/css/index.css">
     <link rel="shortcut icon" href="static/img/logo.svg" type="image/x-icon">
     <meta name="description" content="Посреднеческий чат выполняющий функцию передачи сообщений от одного клиента другому."> 
 </head>
 <body>
-<div id="adfox_171499226934963565"></div>
-<script>
-    window.yaContextCb.push(()=>{
-        Ya.adfoxCode.create({
-            ownerId: 10868101,
-            containerId: 'adfox_171499226934963565',
-            params: {
-                pp: 'g',
-                ps: 'hpty',
-                p2: 'hukd'
-            }
-        })
-    })
-</script>
     <header>
         <div class="container">
             <a class="logo" href="/">
