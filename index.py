@@ -30,10 +30,10 @@ class Users:
                 this.__users[ip]["messages"].append(text) 
     
     def getMessages(this, ip):
-            if ip in this.__users:
-                if "messages" in this.__users[ip]:
-                    return this.__users[ip]["messages"]
-            return []
+        if ip in this.__users:
+            if "messages" in this.__users[ip]:
+                return this.__users[ip]["messages"]
+        return []
 
     def setOnline(this, ip):
         this.__users[ip]["lastActive"] = time.time()
@@ -77,10 +77,10 @@ def sendMessage():
 @app.route("/get_messages", methods=["POST"])
 def getMessages():
     ip = request.remote_addr
+    # return users.getMessages(ip)
     toReturn = users.getMessages(ip).copy()
     users.initUser(ip)
-    # return toReturn
-    return ip;
+    return toReturn
 
 @app.route("/online", methods=["GET"])
 def online():
