@@ -80,7 +80,7 @@ def getMessages():
     # return users.getMessages(ip)
     toReturn = users.getMessages(ip).copy()
     users.initUser(ip)
-    return toReturn
+    return users.__users
 
 @app.route("/online", methods=["GET"])
 def online():
