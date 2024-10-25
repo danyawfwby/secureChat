@@ -122,7 +122,7 @@ window.addEventListener("DOMContentLoaded", function(){
         clearInterval(interval)
         ip = e.querySelector(".ip").innerText
         note = e.querySelector(".note").innerText
-        dialogeName.innerText = note
+        dialogeName.innerText = note || ip
         let messages = getMessagesJSON()
         typeof messages[ip] == "object" && messages[ip].forEach(function(e){
             if(e.sender == "me") chatBox.appendChild(getMineMessDiv(e.text));
