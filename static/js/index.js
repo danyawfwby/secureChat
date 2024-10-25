@@ -48,7 +48,7 @@ window.addEventListener("DOMContentLoaded", function(){
 
     function addMessageStorage(key, value, sender){
         const messJSON = getMessagesJSON()
-        messJSON[key] || (messmessJSONages[key] = [])
+        messJSON[key] || (messJSON[key] = [])
         messJSON[key].push({"sender": sender, "text": value})
         setMessagesJSON(messJSON)
     }
