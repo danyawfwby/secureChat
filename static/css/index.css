@@ -5,7 +5,7 @@
     font-family: 'Montserrat', sans-serif;
 }
 html, body{
-    height: calc(var(--vh, 1vh) * 100)
+    height: 100%;
 }
 body{
     background-color: #FBFBFB;
@@ -209,9 +209,13 @@ body{
     header{
         padding: 20px;
         margin-bottom: 0;
+        height: 75px;
+    }
+    main{
+        height: calc(100% - 75px);
     }
     .chat-container{
-        height: calc( 100vh - 75px );
+        height: 100%;
     }
     .openChats{
         display: flex;
