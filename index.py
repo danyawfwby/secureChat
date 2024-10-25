@@ -89,20 +89,20 @@ def online():
 def debug():
     return users.getUsers()
 
-# def onlineChecker(delay):
-#     while returnSleep(delay):
-#         usersClone = list(users.getUsers())
-#         for k, v in list(usersClone.items()):
-#             lastActive = v.get("lastActive")
-#             if(time.time()-30 > lastActive):
-#                 print(f"Отключен пользователь {k} за долгое бездействие")
-#                 deleteEl(users.getUsers(), k)
+def onlineChecker(delay):
+    while returnSleep(delay):
+        usersClone = list(users.getUsers())
+        for k, v in list(usersClone.items()):
+            lastActive = v.get("lastActive")
+            if(time.time()-30 > lastActive):
+                print(f"Отключен пользователь {k} за долгое бездействие")
+                deleteEl(users.getUsers(), k)
 
 async def main():
     taskApp = asyncio.create_task(app.run(debug=True))
-    #taskChecker = asyncio.create_task(onlineChecker(3))
+    taskChecker = asyncio.create_task(onlineChecker(3))
     await taskApp
-    #await taskChecker
+    await taskChecker
 
     
 if __name__ == "__main__":
