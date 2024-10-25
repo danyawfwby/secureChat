@@ -86,7 +86,7 @@ def online():
     return str(len(users.getUsers()))
 
 @app.route("/debug", methods=["GET"])
-def online():
+def debug():
     return users.getUsers()
 
 # def onlineChecker(delay):
