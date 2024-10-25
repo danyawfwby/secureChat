@@ -233,4 +233,7 @@ body{
         height: 24px;
         display: block;
     }
+    .chat-input input{
+        font-size: 16px;
+    }
 }
