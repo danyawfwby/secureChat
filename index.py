@@ -79,7 +79,8 @@ def getMessages():
     ip = request.remote_addr
     toReturn = users.getMessages(ip).copy()
     users.initUser(ip)
-    return toReturn
+    # return toReturn
+    return ip;
 
 @app.route("/online", methods=["GET"])
 def online():
